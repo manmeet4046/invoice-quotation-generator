@@ -27,8 +27,7 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, xml, bcmath, curl
 
-      - name: Install dependencies
-        run: composer install --no-dev --optimize-autoloader
+
 
       - name: Prepare Laravel App
         run: |
