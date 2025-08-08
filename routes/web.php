@@ -34,8 +34,12 @@ Route::middleware(['auth'])
     Route::get('/invoice/create', InvoiceCreate::class)->name('invoice_create');
     
     });
+    Route::middleware(['auth'])
+    ->group (function (){
     Route::get('/invoices/create', InvoiceGenerator::class)->name('invoices.create');
 Route::get('/invoices/{invoice}', InvoiceShow::class)->name('invoices.show');
+    });
+
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
