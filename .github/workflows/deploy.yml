@@ -1,0 +1,48 @@
+name: Deploy Laravel to FTP
+
+on:
+  push:
+    branches:
+      - main  # This will trigger the deployment only when pushing to the 'main' branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, xml, bcmath, curl
+
+      - name: Install dependencies
+        run: |
+          composer install --no-dev --optimize-autoloader
+
+      - name: Prepare Laravel App
+        run: |
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+
+      - name: Deploy to FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ secrets.FTP_PORT }}
+          protocol: ftps
+          local-dir: ./
+          server-dir: ${{ secrets.FTP_TARGET }}
+          exclude: |
+            .git*
+            .github*
+            node_modules*
+            tests*
+            README.md
+            .env
