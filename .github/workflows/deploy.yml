@@ -51,7 +51,7 @@ jobs:
           protocol: ftps
           local-dir: ./deploy/
           server-dir: ${{ secrets.FTP_TARGET }}
-          dangerous-clean-slate: true
+          
           exclude: |
             .git*
             .github*
